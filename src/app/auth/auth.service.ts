@@ -54,4 +54,17 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.isLoggedIn();
   }
+
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return parseInt(payload.sub, 10); // or `payload.user_id` if you're using custom claims
+    } catch (err) {
+      console.error('Failed to decode token', err);
+      return null;
+    }
+  }
 }

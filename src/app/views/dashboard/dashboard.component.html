@@ -4,11 +4,17 @@
 <div class="dashboard-container">
   <mat-nav-list class="sidebar">
     <a mat-list-item routerLink="/dashboard"><mat-icon>home</mat-icon> Home</a>
-    <a mat-list-item routerLink="/officers"><mat-icon>groups</mat-icon> (LPD) Officers</a>
+    <a mat-list-item routerLink="/officers" routerLinkActive="active"><mat-icon>groups</mat-icon> (LPD) Officers</a>
     <a mat-list-item><mat-icon>local_hospital</mat-icon> LMI</a>
     <a mat-list-item><mat-icon>gavel</mat-icon> LDOJ</a>
     <a mat-list-item><mat-icon>security</mat-icon> SLRT</a>
-    <a mat-list-item><mat-icon>settings</mat-icon> Settings</a>
+    
+    <div class="spacer"></div>
+
+    <a routerLink="/settings"><mat-icon>settings</mat-icon> Settings</a>
+    <button mat-icon-button (click)="logout()" matTooltip="Logout">
+        <mat-icon>logout</mat-icon>
+    </button>
   </mat-nav-list>
 
   <div class="main-content">

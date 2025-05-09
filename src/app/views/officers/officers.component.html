@@ -1,1 +1,48 @@
-<p>officers works!</p>
+<mat-toolbar color="primary" class="officers-toolbar">
+  <span class="toolbar-title">LPD- Officers</span>
+</mat-toolbar>
+<div class="main-layout">
+  <nav class="sidebar">
+    <ul>
+      <li><a routerLink="/dashboard"><mat-icon>home</mat-icon> Home</a></li>
+      <li class="active"><a routerLink="/officers"><mat-icon>groups</mat-icon> (LPD) Officers</a></li>
+      <li><a routerLink="/lmi"><mat-icon>medical_services</mat-icon> LMI</a></li>
+      <li><a routerLink="/ldoj"><mat-icon>gavel</mat-icon> LDOJ</a></li>
+      <li><a routerLink="/slrt"><mat-icon>security</mat-icon> SLRT</a></li>
+    </ul>
+    <ul class="bottom">
+      <li><a (click)="logout()"><mat-icon>logout</mat-icon></a></li>
+      <li><a routerLink="/settings"><mat-icon>settings</mat-icon> Settings</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header -->
+    <header class="header">
+      <h1>LPD - Officers</h1>
+    </header>
+
+    <!-- Officers Grid -->
+    <div class="officers-grid">
+      <mat-card class="officer-card" *ngFor="let officer of officers">
+        <div class="officer-info">
+          <img [src]="officer.image" alt="Mugshot" class="mugshot" />
+          <div>
+            <h3>{{ officer.name }}, {{ officer.age }}</h3>
+            <p><strong>Crime:</strong> {{ officer.crime }}</p>
+            <p><strong>Officers:</strong> {{ officer.involved }}</p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Add Button + Banner -->
+    <div class="banner-column">
+        <button mat-fab color="primary" aria-label="Add Report" (click)="addOfficer()">
+            <mat-icon>add</mat-icon>
+        </button>
+      <div class="banner-label">LPD BANNER</div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,5 +20,9 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+ constructor(private authService: AuthService) {}
 
+  logout(): void {
+    this.authService.logout();
+  }
 }

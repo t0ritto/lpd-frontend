@@ -17,12 +17,14 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OfficersComponent } from './views/officers/officers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    OfficersComponent
   ],
   imports: [
     BrowserModule,
