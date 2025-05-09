@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReportDto } from '../models/report.dto';
 import { Observable } from 'rxjs';
 
@@ -11,8 +11,15 @@ export class ReportService {
 
   constructor(private http: HttpClient) {}
 
-  createReport(report: ReportDto): Observable<any> {
-    return this.http.post(this.apiUrl, report);
+  createReport(report: ReportDto) {
+    const token = localStorage.getItem('auth_token');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+  return this.http.post(this.apiUrl, report, { headers });
   }
 
   // Optional: for listing reports

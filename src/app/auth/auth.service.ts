@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -56,15 +57,19 @@ export class AuthService {
   }
 
   getUserId(): number | null {
-    const token = this.getToken();
-    if (!token) return null;
+  const token = this.getToken();
+  if (!token) return null;
 
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return parseInt(payload.sub, 10); // or `payload.user_id` if you're using custom claims
-    } catch (err) {
-      console.error('Failed to decode token', err);
-      return null;
-    }
+  try {
+    const decoded: any = jwtDecode(token);
+    return Number(decoded.sub); // Assuming `sub` contains user ID
+  } catch (e) {
+    console.error('Invalid token', e);
+    return null;
+  }
+
   }
 }
+
+
+
