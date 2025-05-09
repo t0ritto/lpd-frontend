@@ -1,0 +1,22 @@
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+  
+    input {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      margin: 1rem 0;
+    }
+  
+    button {
+      padding: 0.8rem 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+  
