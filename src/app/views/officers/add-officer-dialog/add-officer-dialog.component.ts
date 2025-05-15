@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../../auth/auth.service'; // ✅ Add this import
 
 @Component({
   selector: 'app-add-officer-dialog',
@@ -23,7 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class AddOfficerDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<AddOfficerDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private authService: AuthService // ✅ Inject AuthService
   ) {}
 
   onCancel(): void {
@@ -31,6 +33,17 @@ export class AddOfficerDialogComponent {
   }
 
   onSave(): void {
-    this.dialogRef.close(this.data);
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      alert('Could not determine user ID');
+      return;
+    }
+
+    const updatedData = {
+      ...this.data,
+      userId: userId // ✅ Attach user ID
+    };
+
+    this.dialogRef.close(updatedData);
   }
 }

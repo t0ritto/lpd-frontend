@@ -56,20 +56,16 @@ export class AuthService {
     return this.isLoggedIn();
   }
 
-  getUserId(): number | null {
-  const token = this.getToken();
-  if (!token) return null;
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
 
-  try {
-    const decoded: any = jwtDecode(token);
-    return Number(decoded.sub); // Assuming `sub` contains user ID
-  } catch (e) {
-    console.error('Invalid token', e);
-    return null;
-  }
-
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.sub; // ✅ returns string UUID instead of trying to convert to number
+    } catch (e) {
+      console.error('Invalid token', e);
+      return null;
+    }
   }
 }
-
-
-

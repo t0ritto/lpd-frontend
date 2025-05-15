@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,6 +12,7 @@ import { AuthService } from '../../auth/auth.service';
 import { ReportService } from '../../services/report.service';
 import { AddOfficerDialogComponent } from './add-officer-dialog/add-officer-dialog.component';
 import { ReportDto } from '../../models/report.dto';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-officers',
@@ -25,37 +26,42 @@ import { ReportDto } from '../../models/report.dto';
     MatCardModule,
     MatButtonModule,
     FormsModule,
-    AddOfficerDialogComponent
+    AddOfficerDialogComponent,
+    RouterLink
   ],
   templateUrl: './officers.component.html',
-  styleUrl: './officers.component.scss'
+  styleUrls: ['./officers.component.scss']
 })
-export class OfficersComponent {
+export class OfficersComponent implements OnInit {
+  userId: string | null = null;
+  officers: any[] = [];
+
   constructor(
     private authService: AuthService,
     private reportService: ReportService,
     private dialog: MatDialog
   ) {}
 
-  officers = [
-    {
-      name: 'John Doe',
-      age: 32,
-      crime: 'Theft',
-      involved: 'Officer A, Officer B',
-      image: 'assets/mugshots/john.jpg'
-    },
-    {
-      name: 'Jane Smith',
-      age: 29,
-      crime: 'Fraud',
-      involved: 'Officer C',
-      image: 'assets/mugshots/jane.jpg'
-    }
-  ];
+  ngOnInit(): void {
+    this.userId = this.authService.getUserId();
+    this.loadReports();
+  }
 
   logout(): void {
     this.authService.logout();
+  }
+
+  loadReports(): void {
+    this.reportService.getReports().subscribe({
+      next: (reports: ReportDto[]) => {
+        this.officers = reports.map(report => ({
+          ...this.parseOfficer(report.description),
+          userId: report.userId,
+          createdAt: report.createdAt
+        }));
+      },
+      error: err => console.error('Failed to load reports', err)
+    });
   }
 
   addOfficer(): void {
@@ -66,20 +72,30 @@ export class OfficersComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.officers.push(result);
-
         const report: ReportDto = {
           title: 'Arrest Report',
           description: `${result.name}, ${result.age} | Crime: ${result.crime} | Involved Officers: ${result.involved}`,
-          departmentId: 1, // Adjust based on the department logic
-          userId: this.authService.getUserId() // This must return a numeric user ID
+          departmentId: 1,
+          userId: this.userId,
+          createdAt: new Date().toISOString()
         };
 
         this.reportService.createReport(report).subscribe({
-          next: () => console.log('Report saved'),
+          next: () => this.loadReports(), // ✅ Refresh list to stay up to date
           error: err => console.error('Failed to save report', err)
         });
       }
     });
+  }
+
+  private parseOfficer(description: string): any {
+    const match = description.match(/^(.+?), (\d+).*Crime: (.*?) \| Involved Officers: (.*)$/);
+    return {
+      name: match?.[1] ?? 'Unknown',
+      age: Number(match?.[2]) || 0,
+      crime: match?.[3] ?? 'Unknown',
+      involved: match?.[4] ?? '',
+      image: 'assets/mugshots/default.jpg'
+    };
   }
 }

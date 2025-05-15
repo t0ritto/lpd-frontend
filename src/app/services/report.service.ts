@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ReportDto } from '../models/report.dto';
 import { Observable } from 'rxjs';
+import { ReportDto } from '../models/report.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
-  private readonly apiUrl = 'http://localhost:9090/api/reports'; // Adjust if different
+  private readonly apiUrl = 'http://localhost:9090/api/reports';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  createReport(report: ReportDto) {
-    const token = localStorage.getItem('auth_token');
-
-    const headers = new HttpHeaders({
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken(); // ✅ Make sure this works
+    return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     });
-
-  return this.http.post(this.apiUrl, report, { headers });
   }
 
-  // Optional: for listing reports
-  getReports(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getReports(): Observable<ReportDto[]> {
+    return this.http.get<ReportDto[]>(this.apiUrl, { headers: this.getHeaders() });
+  }
+
+  createReport(report: ReportDto): Observable<ReportDto> {
+    return this.http.post<ReportDto>(this.apiUrl, report, { headers: this.getHeaders() });
   }
 }
