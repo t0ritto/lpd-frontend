@@ -14,6 +14,8 @@ import { AddOfficerDialogComponent } from './add-officer-dialog/add-officer-dial
 import { ReportDto } from '../../models/report.dto';
 import { RouterLink } from '@angular/router';
 
+export type FullReport = ReportDto & { id: number; officerInfo: any };
+
 @Component({
   selector: 'app-officers',
   standalone: true,
@@ -34,7 +36,7 @@ import { RouterLink } from '@angular/router';
 })
 export class OfficersComponent implements OnInit {
   userId: string | null = null;
-  officers: any[] = [];
+  reports: FullReport[] = [];
 
   constructor(
     private authService: AuthService,
@@ -53,14 +55,14 @@ export class OfficersComponent implements OnInit {
 
   loadReports(): void {
     this.reportService.getReports().subscribe({
-      next: (reports: ReportDto[]) => {
-        this.officers = reports.map(report => ({
-          ...this.parseOfficer(report.description),
-          userId: report.userId,
-          createdAt: report.createdAt
-        }));
+      next: (reports) => {
+        console.log('Fetched reports:', reports);
+        this.reports = reports.map((report) => ({
+          ...report,
+          officerInfo: this.parseOfficer(report.description)
+        })) as FullReport[];
       },
-      error: err => console.error('Failed to load reports', err)
+      error: (err) => console.error('Failed to load reports', err)
     });
   }
 
@@ -81,14 +83,44 @@ export class OfficersComponent implements OnInit {
         };
 
         this.reportService.createReport(report).subscribe({
-          next: () => this.loadReports(), // ✅ Refresh list to stay up to date
-          error: err => console.error('Failed to save report', err)
+          next: (saved: ReportDto & { id: number }) => {
+            const fullReport: FullReport = {
+              ...saved,
+              officerInfo: this.parseOfficer(saved.description)
+            };
+            this.reports.push(fullReport);
+          },
+          error: (err) => console.error('Failed to save report', err)
         });
       }
     });
   }
 
-  private parseOfficer(description: string): any {
+  editReport(report: FullReport): void {
+    const updatedReport: ReportDto = {
+      title: 'Updated Arrest Report',
+      description: report.description,
+      departmentId: report.departmentId,
+      userId: report.userId,
+      createdAt: new Date().toISOString()
+    };
+
+    this.reportService.updateReport(report.id, updatedReport).subscribe({
+      next: () => this.loadReports(),
+      error: (err) => console.error('Failed to update report', err)
+    });
+  }
+
+  deleteReport(reportId: number): void {
+    this.reportService.deleteReport(reportId).subscribe({
+      next: () => {
+        this.reports = this.reports.filter(r => r.id !== reportId);
+      },
+      error: (err) => console.error('Failed to delete report', err)
+    });
+  }
+
+  parseOfficer(description: string): any {
     const match = description.match(/^(.+?), (\d+).*Crime: (.*?) \| Involved Officers: (.*)$/);
     return {
       name: match?.[1] ?? 'Unknown',

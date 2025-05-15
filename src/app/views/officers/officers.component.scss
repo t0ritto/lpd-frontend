@@ -54,14 +54,12 @@
   }
 }
 
-/* Content Area */
 .content {
   flex: 1;
   padding: 40px;
   overflow-y: auto;
 }
 
-/* Header Bar */
 .header {
   background-color: #121212;
   color: white;
@@ -69,6 +67,17 @@
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-id-box {
+  font-size: 14px;
+  color: #fff;
+  background-color: #3f51b5;
+  padding: 6px 12px;
+  border-radius: 4px;
 }
 
 /* Officer Cards Grid */
@@ -85,14 +94,15 @@
   padding: 1rem;
   border-radius: 12px;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* Card Layout */
 .officer-info {
   display: flex;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* Mugshot Image */
@@ -117,4 +127,10 @@
 .banner-label {
   font-weight: bold;
   color: #ccc;
+}
+
+.officer-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }

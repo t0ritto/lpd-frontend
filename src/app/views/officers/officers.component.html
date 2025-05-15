@@ -1,7 +1,9 @@
 <mat-toolbar color="primary" class="officers-toolbar">
   <span class="toolbar-title">LPD- Officers</span>
 </mat-toolbar>
+
 <div class="main-layout">
+  <!-- Sidebar -->
   <nav class="sidebar">
     <ul>
       <li><a routerLink="/dashboard" routerLinkActive="active"><mat-icon>home</mat-icon> Home</a></li>
@@ -19,33 +21,40 @@
   <!-- Main Content -->
   <div class="content">
     <!-- Header -->
-    <header class="header" style="display: flex; justify-content: space-between; align-items: center;">
+    <header class="header">
       <h1>LPD - Officers</h1>
-      <div style="font-size: 14px; color: #fff; background-color: #3f51b5; padding: 6px 12px; border-radius: 4px;">
-        User ID: {{ userId }}
-      </div>
+      <div class="user-id-box">User ID: {{ userId }}</div>
     </header>
-
 
     <!-- Officers Grid -->
     <div class="officers-grid">
-      <mat-card class="officer-card" *ngFor="let officer of officers">
+      <mat-card class="officer-card" *ngFor="let report of reports">
         <div class="officer-info">
-          <img [src]="officer.image" alt="Mugshot" class="mugshot" />
+          <img [src]="report.officerInfo?.image || 'assets/mugshots/default.jpg'" alt="Mugshot" class="mugshot" />
           <div>
-            <h3>{{ officer.name }}, {{ officer.age }}</h3>
-            <p><strong>Crime:</strong> {{ officer.crime }}</p>
-            <p><strong>Officers:</strong> {{ officer.involved }}</p>
+            <h3>{{ report.officerInfo?.name }}, {{ report.officerInfo?.age }}</h3>
+            <p><strong>Crime:</strong> {{ report.officerInfo?.crime }}</p>
+            <p><strong>Officers:</strong> {{ report.officerInfo?.involved }}</p>
           </div>
+        </div>
+
+        <!-- Edit/Delete buttons if report belongs to department 1 -->
+        <div class="officer-actions" *ngIf="report.departmentId === 1">
+          <button mat-mini-button color="primary" (click)="editReport(report)">
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+          <button mat-mini-button color="warn" (click)="deleteReport(report.id!)">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
         </div>
       </mat-card>
     </div>
 
     <!-- Add Button + Banner -->
     <div class="banner-column">
-        <button mat-fab color="primary" aria-label="Add Report" (click)="addOfficer()">
-            <mat-icon>add</mat-icon>
-        </button>
+      <button mat-fab color="primary" aria-label="Add Report" (click)="addOfficer()">
+        <mat-icon>add</mat-icon>
+      </button>
       <div class="banner-label">LPD BANNER</div>
     </div>
   </div>

@@ -13,7 +13,7 @@ export class ReportService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken(); // ✅ Make sure this works
+    const token = this.authService.getToken();
     return new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
@@ -24,7 +24,16 @@ export class ReportService {
     return this.http.get<ReportDto[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  createReport(report: ReportDto): Observable<ReportDto> {
-    return this.http.post<ReportDto>(this.apiUrl, report, { headers: this.getHeaders() });
+  
+  createReport(report: ReportDto): Observable<ReportDto & { id: number }> {
+  return this.http.post<ReportDto & { id: number }>(this.apiUrl, report, { headers: this.getHeaders() });
+  }
+
+  updateReport(reportId: number, updatedReport: ReportDto): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${reportId}`, updatedReport, { headers: this.getHeaders() });
+  }
+
+  deleteReport(reportId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${reportId}`, { headers: this.getHeaders() });
   }
 }

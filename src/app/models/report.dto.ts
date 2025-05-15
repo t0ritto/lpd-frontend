@@ -1,4 +1,5 @@
 export interface ReportDto {
+  id?: number;
   title: string;
   description: string;
   departmentId: number;
