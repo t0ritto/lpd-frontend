@@ -34,7 +34,7 @@ export type FullReport = ReportDto & { id: number; officerInfo: any };
   styleUrls: ['./officers.component.scss']
 })
 export class OfficersComponent implements OnInit {
-  userId: string = '';
+  userKeycloakId: string | null = null;
   reports: FullReport[] = [];
 
   constructor(
@@ -44,8 +44,7 @@ export class OfficersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.authService.getUserId();
-    this.userId = typeof id === 'string' ? id : '';
+    this.userKeycloakId = this.authService.getUserId();
     this.loadReports();
   }
 
@@ -54,6 +53,8 @@ export class OfficersComponent implements OnInit {
   }
 
   loadReports(): void {
+    console.log('Current userKeycloakId:', this.userKeycloakId);
+
     this.reportService.getReports().subscribe({
       next: (reports) => {
         this.reports = reports
@@ -62,9 +63,7 @@ export class OfficersComponent implements OnInit {
             ...report,
             officerInfo: this.parseOfficer(report.description)
           }));
-
-        console.log('Current userId:', this.userId);
-        console.log('Report userIds:', this.reports.map(r => r.userId));
+        console.log('Report userKeycloakIds:', this.reports.map(r => r.userKeycloakId));
       },
       error: (err) => console.error('Failed to load reports', err)
     });
@@ -82,7 +81,7 @@ export class OfficersComponent implements OnInit {
           title: 'Arrest Report',
           description: `${result.name}, ${result.age} | Crime: ${result.crime} | Involved Officers: ${result.involved}`,
           departmentId: 1,
-          userId: this.userId,
+          userKeycloakId: this.userKeycloakId!,
           createdAt: new Date().toISOString()
         };
 
@@ -104,9 +103,9 @@ export class OfficersComponent implements OnInit {
     const updatedReport: ReportDto = {
       title: 'Updated Arrest Report',
       description: report.description,
-      departmentId: report.departmentId ?? 1, // fallback if missing
-      userId: report.userId,
-      createdAt: report.createdAt // use the original timestamp
+      departmentId: 1,
+      userKeycloakId: report.userKeycloakId,
+      createdAt: new Date().toISOString()
     };
 
     this.reportService.updateReport(report.id, updatedReport).subscribe({

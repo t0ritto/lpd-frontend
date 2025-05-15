@@ -3,8 +3,7 @@ export interface ReportDto {
   title: string;
   description: string;
   departmentId: number;
-  userId: string | null;
-  // userKeycloakId: string; // <-- this is what your backend likely uses now
+  userKeycloakId: string; // <-- this is what your backend likely uses now
   createdAt: string;
 }
 

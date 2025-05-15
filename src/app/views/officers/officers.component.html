@@ -23,7 +23,7 @@
     <!-- Header -->
     <header class="header">
       <h1>LPD - Officers</h1>
-      <div class="user-id-box">User ID: {{ userId }}</div>
+      <div class="user-id-box">User ID: {{ userKeycloakId }}</div>
     </header>
 
     <!-- Officers Grid -->
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Edit/Delete buttons only for the creator (using UUID comparison) -->
-        <div class="officer-actions" *ngIf="report.userKeycloakId === userId">
+        <div class="officer-actions">
           <button mat-mini-button color="primary" (click)="editReport(report)">
             <mat-icon>edit</mat-icon> Edit
           </button>
