@@ -61,10 +61,10 @@ export class AuthService {
     if (!token) return null;
 
     try {
-      const decoded: any = jwtDecode(token);
-      return decoded.sub; // ✅ returns string UUID instead of trying to convert to number
-    } catch (e) {
-      console.error('Invalid token', e);
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || null; // most Keycloak setups use "sub" for user UUID
+    } catch (error) {
+      console.error('Failed to decode token:', error);
       return null;
     }
   }

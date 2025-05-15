@@ -23,35 +23,35 @@
   padding: 16px;
   background-color: #1d1d1d;
   color: white;
+}
 
-  ul {
-    list-style: none;
-    padding: 0;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
 
-    li {
-      margin-bottom: 16px;
+.sidebar li {
+  margin-bottom: 16px;
+}
 
-      a {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: white;
-        text-decoration: none;
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+}
 
-        &:hover {
-          opacity: 0.8;
-        }
-      }
-    }
-  }
+.sidebar a:hover {
+  opacity: 0.8;
+}
 
-  .bottom {
-    margin-top: auto;
+.sidebar .bottom {
+  margin-top: auto;
+}
 
-    li {
-      margin-top: 16px;
-    }
-  }
+.sidebar .bottom li {
+  margin-top: 16px;
 }
 
 .content {
@@ -96,6 +96,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+  position: relative;
 }
 
 /* Card Layout */
@@ -129,8 +131,28 @@
   color: #ccc;
 }
 
+/* Edit/Delete Buttons */
 .officer-actions {
   display: flex;
-  gap: 8px;
   justify-content: flex-end;
+  margin-top: auto;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.officer-actions button {
+  font-size: 12px;
+  padding: 4px 8px;
+  min-width: 64px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-transform: none;
+}
+
+.officer-actions mat-icon {
+  font-size: 16px;
+  vertical-align: middle;
 }

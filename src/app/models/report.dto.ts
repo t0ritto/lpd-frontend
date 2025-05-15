@@ -4,6 +4,7 @@ export interface ReportDto {
   description: string;
   departmentId: number;
   userId: string | null;
+  // userKeycloakId: string; // <-- this is what your backend likely uses now
   createdAt: string;
 }
 

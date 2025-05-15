@@ -38,8 +38,8 @@
           </div>
         </div>
 
-        <!-- Edit/Delete buttons if report belongs to department 1 -->
-        <div class="officer-actions" *ngIf="report.departmentId === 1">
+        <!-- Edit/Delete buttons only for the creator (using UUID comparison) -->
+        <div class="officer-actions" *ngIf="report.userKeycloakId === userId">
           <button mat-mini-button color="primary" (click)="editReport(report)">
             <mat-icon>edit</mat-icon> Edit
           </button>

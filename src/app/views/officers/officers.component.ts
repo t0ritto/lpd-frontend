@@ -28,14 +28,13 @@ export type FullReport = ReportDto & { id: number; officerInfo: any };
     MatCardModule,
     MatButtonModule,
     FormsModule,
-    AddOfficerDialogComponent,
     RouterLink
   ],
   templateUrl: './officers.component.html',
   styleUrls: ['./officers.component.scss']
 })
 export class OfficersComponent implements OnInit {
-  userId: string | null = null;
+  userId: string = '';
   reports: FullReport[] = [];
 
   constructor(
@@ -45,7 +44,8 @@ export class OfficersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();
+    const id = this.authService.getUserId();
+    this.userId = typeof id === 'string' ? id : '';
     this.loadReports();
   }
 
@@ -56,11 +56,15 @@ export class OfficersComponent implements OnInit {
   loadReports(): void {
     this.reportService.getReports().subscribe({
       next: (reports) => {
-        console.log('Fetched reports:', reports);
-        this.reports = reports.map((report) => ({
-          ...report,
-          officerInfo: this.parseOfficer(report.description)
-        })) as FullReport[];
+        this.reports = reports
+          .filter((r): r is FullReport => typeof r.id === 'number')
+          .map((report) => ({
+            ...report,
+            officerInfo: this.parseOfficer(report.description)
+          }));
+
+        console.log('Current userId:', this.userId);
+        console.log('Report userIds:', this.reports.map(r => r.userId));
       },
       error: (err) => console.error('Failed to load reports', err)
     });
@@ -100,9 +104,9 @@ export class OfficersComponent implements OnInit {
     const updatedReport: ReportDto = {
       title: 'Updated Arrest Report',
       description: report.description,
-      departmentId: report.departmentId,
+      departmentId: report.departmentId ?? 1, // fallback if missing
       userId: report.userId,
-      createdAt: new Date().toISOString()
+      createdAt: report.createdAt // use the original timestamp
     };
 
     this.reportService.updateReport(report.id, updatedReport).subscribe({
@@ -126,8 +130,7 @@ export class OfficersComponent implements OnInit {
       name: match?.[1] ?? 'Unknown',
       age: Number(match?.[2]) || 0,
       crime: match?.[3] ?? 'Unknown',
-      involved: match?.[4] ?? '',
-      image: 'assets/mugshots/default.jpg'
+      involved: match?.[4] ?? ''
     };
   }
 }
