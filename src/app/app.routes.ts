@@ -18,6 +18,12 @@ export const routes: Routes = [
       import('./views/officers/officers.component').then(m => m.OfficersComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'ldoj',
+    loadComponent: () =>
+      import('./views/ldoj/ldoj.component').then(m => m.LdojComponent),
+    canActivate: [AuthGuard]
+  },
 
   { path: '**', redirectTo: 'login' }
 ];

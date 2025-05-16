@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Add Court Report</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Case Name</mat-label>
+    <input matInput [(ngModel)]="data.caseName">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Date</mat-label>
+    <input matInput [(ngModel)]="data.date" placeholder="tt.mm.jjjj">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Judge</mat-label>
+    <input matInput [(ngModel)]="data.judge">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Defendant</mat-label>
+    <input matInput [(ngModel)]="data.defendant">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Court Case Description</mat-label>
+    <textarea matInput rows="4" [(ngModel)]="data.caseDescription"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

@@ -1,5 +1,5 @@
-<mat-toolbar color="primary" class="officers-toolbar">
-  <span class="toolbar-title">LPD- Officers</span>
+<mat-toolbar color="primary" class="ldoj-toolbar">
+  <span class="toolbar-title">LDOJ - Court Reports</span>
 </mat-toolbar>
 
 <div class="main-layout">
@@ -22,24 +22,24 @@
   <div class="content">
     <!-- Header -->
     <header class="header">
-      <h1>LPD - Officers</h1>
+      <h1>Court Reports</h1>
       <div class="user-id-box">User ID: {{ userKeycloakId }}</div>
     </header>
 
-    <!-- Officers Grid -->
-    <div class="officers-grid">
-      <mat-card class="officer-card" *ngFor="let report of reports">
-        <div class="officer-info">
-          <img [src]="report.officerInfo?.image || 'assets/mugshots/default.jpg'" alt="Mugshot" class="mugshot" />
+    <!-- Court Report Cards -->
+    <div class="court-grid">
+      <mat-card class="court-card" *ngFor="let report of reports">
+        <div class="court-info">
           <div>
-            <h3>{{ report.officerInfo?.name }}, {{ report.officerInfo?.age }}</h3>
-            <p><strong>Crime:</strong> {{ report.officerInfo?.crime }}</p>
-            <p><strong>Officers:</strong> {{ report.officerInfo?.involved }}</p>
+            <h3>Case: {{ report.courtInfo?.caseName }}</h3>
+            <p><strong>Date:</strong> {{ report.courtInfo?.date }}</p>
+            <p><strong>Judge:</strong> {{ report.courtInfo?.judge }}</p>
+            <p><strong>Defendant:</strong> {{ report.courtInfo?.defendant }}</p>
           </div>
         </div>
 
-        <!-- Edit/Delete buttons only for the creator (using UUID comparison) -->
-        <div class="officer-actions">
+        <!-- Actions only for LDOJ user -->
+        <div class="court-actions" *ngIf="canEditOrDelete(report)">
           <button mat-mini-button color="primary" (click)="editReport(report)">
             <mat-icon>edit</mat-icon> Edit
           </button>
@@ -52,10 +52,10 @@
 
     <!-- Add Button + Banner -->
     <div class="banner-column">
-      <button mat-fab color="primary" aria-label="Add Report" (click)="addOfficer()">
+      <button mat-fab color="primary" aria-label="Add Report" *ngIf="userKeycloakId" (click)="addReport()">
         <mat-icon>add</mat-icon>
       </button>
-      <div class="banner-label">LPD BANNER</div>
+      <div class="banner-label">LDOJ COURT BANNER</div>
     </div>
   </div>
 </div>
