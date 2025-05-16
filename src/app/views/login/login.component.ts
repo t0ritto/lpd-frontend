@@ -21,8 +21,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  username = '';
+  password = '';
 
   constructor(private authService: AuthService) {}
 

@@ -57,7 +57,7 @@ export class LdojComponent implements OnInit {
     this.reportService.getReports().subscribe({
       next: (reports) => {
         this.reports = reports
-          .filter((r): r is FullCourtReport => typeof r.id === 'number' && r.departmentId === 3)
+          .filter((r): r is FullCourtReport => typeof r.id === 'number')
           .map((report) => ({
             ...report,
             courtInfo: this.parseCourtInfo(report.description)
